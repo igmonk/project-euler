@@ -31,12 +31,11 @@
   "Returns the largest palindrome made from the product of two 3-digit numbers."
   []
   (reduce (fn [palindrome-max a]
-            (reduce (fn [p-max b]
-                      (let [ab (* a b)]
-                        (if (palindrome? ab) ab p-max)))
-                    palindrome-max
-                    (take-while (partial < (/ palindrome-max a)) (if (= (mod a 11) 0)
-                                                                   (numbers a)
-                                                                   (numbers-optimized a)))))
+            (let [b-numbers (if (= (mod a 11) 0) (numbers a) (numbers-optimized a))]
+              (reduce (fn [p-max b]
+                        (let [ab (* a b)]
+                          (if (palindrome? ab) ab p-max)))
+                      palindrome-max
+                      (take-while (partial < (/ palindrome-max a)) b-numbers))))
           0
           (numbers)))
